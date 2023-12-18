@@ -6,10 +6,11 @@ const cover = document.getElementById("cover");
 const play = document.getElementById("play");
 const previous = document.getElementById("previous");
 const next = document.getElementById("next");
+const shuffle = document.getElementById("shuffle");
+const repeat = document.getElementById("repeat");
 
 const progressContainer = document.getElementById("progress-container");
 const currentProgressBar = document.getElementById("current-progress-bar");
-const shuffle = document.getElementById("shuffle");
 
 const albumLayer = { cover: "rap_e_compromisso" };
 const introducao = {
@@ -94,6 +95,7 @@ const playlist = [
 
 let isPlaying = false;
 let isShuffled = false;
+let repeatOn = false;
 let sortedPlaylist = [...playlist];
 let index = 0;
 
@@ -179,8 +181,26 @@ function shuffleClicked() {
     shuffle.classList.add("btn-active");
   } else {
     isShuffled = false;
-    sortedPlaylist = [...playlist]
+    sortedPlaylist = [...playlist];
     shuffle.classList.remove("btn-active");
+  }
+}
+
+function repeatClicked() {
+  if (repeatOn === false) {
+    repeatOn = true;
+    repeat.classList.add("btn-active");
+  } else {
+    repeatOn = false;
+    repeat.classList.remove("btn-active");
+  }
+}
+
+function nextOrRepeat() {
+  if (repeatOn === false) {
+    nextTrack();
+  } else {
+    playTrack();
   }
 }
 
@@ -190,5 +210,7 @@ play.addEventListener("click", playPauseDecider);
 previous.addEventListener("click", previousTrack);
 next.addEventListener("click", nextTrack);
 track.addEventListener("timeupdate", updateProgressBar);
+track.addEventListener("ended", nextOrRepeat);
 progressContainer.addEventListener("click", jumpTo);
 shuffle.addEventListener("click", shuffleClicked);
+repeat.addEventListener("click", repeatClicked);
