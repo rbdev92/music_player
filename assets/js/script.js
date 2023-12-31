@@ -12,6 +12,9 @@ const repeat = document.getElementById("repeat");
 const progressContainer = document.getElementById("progress-container");
 const currentProgressBar = document.getElementById("current-progress-bar");
 
+const trackTime = document.getElementById("track-time");
+const totalTime = document.getElementById("total-time");
+
 const albumLayer = { cover: "rap_e_compromisso" };
 const introducao = {
   trackName: "Introdução",
@@ -150,9 +153,10 @@ function nextTrack() {
   playTrack();
 }
 
-function updateProgressBar() {
+function updateProgress() {
   const barWidth = (track.currentTime / track.duration) * 100;
   currentProgressBar.style.setProperty("--progress", `${barWidth}%`);
+  trackTime.innerText = toHoursMinutesSeconds(track.currentTime);
 }
 
 function jumpTo(event) {
@@ -204,13 +208,39 @@ function nextOrRepeat() {
   }
 }
 
+function toHoursMinutesSeconds(originalNumber) {
+  const ONE_HOUR_IN_SECONDS = 3600;
+  const ONE_HOUR_IN_MINUTES = 60;
+
+  let hours = Math.floor(originalNumber / ONE_HOUR_IN_SECONDS);
+  let minutes = Math.floor(
+    (originalNumber - hours * ONE_HOUR_IN_SECONDS) / ONE_HOUR_IN_MINUTES
+  );
+  let seconds = Math.floor(
+    originalNumber - hours * ONE_HOUR_IN_SECONDS - minutes * ONE_HOUR_IN_MINUTES
+  );
+
+  return `${hours.toString().padStart(2, "0")}:${minutes
+    .toString()
+    .padStart(2, "0")}:${seconds.toString().padStart(2, "0")}`;
+}
+
+function updateCurrentTime() {
+  trackTime.innerText = toHoursMinutesSeconds(track.currentTime);
+}
+
+function updateTotalTime() {
+  totalTime.innerText = toHoursMinutesSeconds(track.duration);
+}
+
 initializeTrack();
 
 play.addEventListener("click", playPauseDecider);
 previous.addEventListener("click", previousTrack);
 next.addEventListener("click", nextTrack);
-track.addEventListener("timeupdate", updateProgressBar);
+track.addEventListener("timeupdate", updateProgress);
 track.addEventListener("ended", nextOrRepeat);
+track.addEventListener("loadedmetadata", updateTotalTime);
 progressContainer.addEventListener("click", jumpTo);
 shuffle.addEventListener("click", shuffleClicked);
 repeat.addEventListener("click", repeatClicked);
