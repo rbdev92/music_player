@@ -1,13 +1,27 @@
+:root {
+  --white-color: rgb(255, 255, 255);
+  --btn-active: rgb(0, 185, 110);
+  --light-color: rgb(139, 153, 156);
+  --gradient-linear-blue: rgb(51, 65, 115);
+  --gradient-linear-black: rgb(6, 5, 10);
+  --bg-progress-bar: rgb(139, 153, 156);
+  --bg-current-progress-bar: rgb(255, 255, 255);
+  --time-box-color: rgb(230, 230, 230);
+}
+
 body {
-  background-image: linear-gradient(#334173, #06050a);
-  color: #fff;
+  background-image: linear-gradient(
+    var(--gradient-linear-blue),
+    var(--gradient-linear-black)
+  );
+  color: var(--white-color);
   font-family: sans-serif;
 
   display: flex;
   flex-direction: column;
   align-items: center;
 
-  height: 100vh;
+  height: 100%;
 }
 
 button {
@@ -49,17 +63,17 @@ button:hover {
 }
 
 #progress-bar {
-  background-color: rgb(139, 153, 156);
+  background-color: var(--bg-progress-bar);
   height: 3px;
   width: 100%;
   border-radius: 10px;
 }
 
 #current-progress-bar {
-  --progress: 0%;
-  background-color: #fff;
+  background-color: var(--bg-current-progress-bar);
   border-radius: inherit;
   height: inherit;
+  --progress: 0%;
   width: var(--progress);
 }
 
@@ -77,6 +91,8 @@ button:hover {
   justify-content: space-between;
   font-size: smaller;
   margin-top: 0.4em;
+  color: var(--time-box-color);
+  font-weight: thin;
 }
 
 .btn {
@@ -91,14 +107,16 @@ button:hover {
   font-size: 4em;
 }
 
-.btn-active {
-  color: rgb(0, 185, 110);
-}
-
 .music-container {
   padding: 2rem;
 }
 
 .light-color {
-  color: rgb(139, 153, 156);
+  color: var(--light-color);
 }
+
+.btn-active {
+  color: var(--btn-active);
+}
+
+

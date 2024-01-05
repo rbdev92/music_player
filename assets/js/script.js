@@ -2,6 +2,7 @@ const trackName = document.getElementById("track-name");
 const artistName = document.getElementById("artist-name");
 const track = document.getElementById("track");
 const cover = document.getElementById("cover");
+const likeButton = document.getElementById("like");
 
 const play = document.getElementById("play");
 const previous = document.getElementById("previous");
@@ -20,69 +21,80 @@ const introducao = {
   trackName: "Introdução",
   artistName: "Sabotage",
   file: "01_introducao",
+  liked: false,
 };
 
 const rapECompromisso = {
   trackName: "Rap É Compromisso",
   artistName: "Sabotage",
   file: "02_rap_e_compromisso",
+  liked: false,
 };
 
 const umBomLugar = {
   trackName: "Um Bom Lugar",
   artistName: "Sabotage",
   file: "03_um_bom_lugar",
+  liked: false,
 };
 
 const noBrooklin = {
   trackName: "No Brooklin",
   artistName: "Sabotage",
   file: "04_no_brooklin",
+  liked: false,
 };
 
 const cocaina = {
   trackName: "Cocaína",
   artistName: "Sabotage",
   file: "05_cocaina",
+  liked: false,
 };
 
 const naZonaSul = {
   trackName: "Na Zona Sul",
   artistName: "Sabotage",
   file: "06_na_zona_sul",
+  liked: false,
 };
 
 const aCultura = {
   trackName: "A Cultura",
   artistName: "Sabotage",
   file: "07_a_cultura",
+  liked: false,
 };
 
 const incentivandoOSom = {
   trackName: "Incentivando O Som",
   artistName: "Sabotage",
   file: "08_incentivando_o_som",
+  liked: false,
 };
 
 const respeitoEPraQuemTem = {
   trackName: "Respeito É Pra Quem Tem",
   artistName: "Sabotage",
   file: "09_respeito_e_pra_quem_tem",
+  liked: false,
 };
 
 const paisDaFome = {
   trackName: "País da Fome",
   artistName: "Sabotage",
   file: "10_pais_da_fome",
+  liked: false,
 };
 
 const cantandoProSanto = {
   trackName: "Cantando Pro Santo",
   artistName: "Sabotage",
   file: "11_cantando_pro_panto",
+  liked: false,
 };
 
-const playlist = [
+const playlist = JSON.parse(localStorage.getItem("playlist")) ?? [
   introducao,
   rapECompromisso,
   umBomLugar,
@@ -124,11 +136,24 @@ function playPauseDecider() {
   }
 }
 
+function likeButtonRender() {
+  if (sortedPlaylist[index].liked === true) {
+    likeButton.querySelector(".bi").classList.remove("bi-heart");
+    likeButton.querySelector(".bi").classList.add("bi-heart-fill");
+    likeButton.classList.add("btn-active");
+  } else {
+    likeButton.querySelector(".bi").classList.add("bi-heart");
+    likeButton.querySelector(".bi").classList.remove("bi-heart-fill");
+    likeButton.classList.remove("btn-active");
+  }
+}
+
 function initializeTrack() {
   cover.src = `assets/images/${albumLayer.cover}.jpg`;
   track.src = `assets/songs/sabotage_rap_e_compromisso/${sortedPlaylist[index].file}.mp3`;
   trackName.innerText = sortedPlaylist[index].trackName;
   artistName.innerText = sortedPlaylist[index].artistName;
+  likeButtonRender();
 }
 
 function previousTrack() {
@@ -233,6 +258,16 @@ function updateTotalTime() {
   totalTime.innerText = toHoursMinutesSeconds(track.duration);
 }
 
+function likeButtonClicked() {
+  if (sortedPlaylist[index].liked === false) {
+    sortedPlaylist[index].liked = true;
+  } else {
+    sortedPlaylist[index].liked = false;
+  }
+  likeButtonRender();
+  localStorage.setItem("playlist", JSON.stringify(playlist));
+}
+
 initializeTrack();
 
 play.addEventListener("click", playPauseDecider);
@@ -244,3 +279,4 @@ track.addEventListener("loadedmetadata", updateTotalTime);
 progressContainer.addEventListener("click", jumpTo);
 shuffle.addEventListener("click", shuffleClicked);
 repeat.addEventListener("click", repeatClicked);
+likeButton.addEventListener("click", likeButtonClicked);
